@@ -2,8 +2,10 @@
 
 ## =============== ≠≠≠ ===============
 ##  Variable
-$SSHkeyPUB = '$(cat Key.pub)'
-# Get-Variable 
+$SSHkeyPUBSSHKEPUB = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKp3bxeApwQec9N6DaIP1Iq3o7Ks4jcL66wHi1YdqkFC root'
+
+
+
 
 ## =============== ≠≠≠ ===============
 ##  Start as Administrator
@@ -25,12 +27,13 @@ Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -fil
 exit
 }
 
+
 #########  INSTALL OPENSSH  #########
 ## =============== ≠≠≠ ===============
 ##      Add New Directory
 New-Item -Path "$env:SYSTEMDRIVE\" -Name "PS\OpenSSH" -ItemType Directory -force;
 
-##=============== ≠≠≠ ===============
+## =============== ≠≠≠ ===============
 ## Определяем Архитектуру x64 x86
 If([IntPtr]::Size -eq 4)
 {
@@ -39,19 +42,21 @@ echo "##------ v8.1.0.0p1-Beta ------"
 Invoke-WebRequest -Uri "https://github.com/numbnet/Win10andAppx/releases/download/v8.1.0.0p1-Beta/OpenSSH-Win32.zip" -OutFile "$env:SYSTEMDRIVE\PS\OpenSSH\OpenSSH-Win32.zip"
 
 ## =============== ≠≠≠ ===============
-##======= Unzip the files =========
+echo "======= Unzip the files ========="
 Expand-Archive -Path $env:SYSTEMDRIVE\PS\OpenSSH\OpenSSH-Win32.Zip -DestinationPath $env:ProgramFiles\OpenSSH\;
 
 copy $env:ProgramFiles\OpenSSH\OpenSSH-Win32\* $env:ProgramFiles\OpenSSH;
+
 }
-Else
+    Else
 {
-Write-Host "Windows x64";
+    Write-Host "Windows x64";
 ## =============== ≠≠≠ ===============
 ## ВЫПОЛНЯЕМ ДЛЯ Windows x64
 
 ##---------v8.1.0.0p1-Beta-----------
 Invoke-WebRequest -Uri "https://github.com/numbnet/Win10andAppx/releases/download/v8.1.0.0p1-Beta/OpenSSH-Win64.zip" -OutFile "$env:SYSTEMDRIVE\PS\OpenSSH\OpenSSH-Win64.zip"
+
 
 ## =============== ≠≠≠ ===============
 echo "======== Unzip the files ========"
@@ -60,7 +65,9 @@ Expand-Archive -Path "$env:SYSTEMDRIVE\PS\OpenSSH\OpenSSH-Win64.Zip" -Destinatio
 ## =============== ≠≠≠ ===============
 echo "===== Copy \OpenSSH\OpenSSH-Win64\  \OpenSSH ======"
 copy $env:ProgramFiles\OpenSSH\OpenSSH-Win64\* $env:ProgramFiles\OpenSSH;
+
 }
+
 
 ##================= ≠≠≠ =================
 echo "========= Install service ========="
@@ -86,6 +93,25 @@ Restart-Service sshd;
 echo "=============== force file creation"
 New-item -Path $env:USERPROFILE -Name .ssh -ItemType Directory -force;
 
+
+##########################################
+## Для начала посмотрим имя ПК
+$env:COMPUTERNAME
+
+## смена имени с перезагрузкой
+# Rename-Computer -NewName "NNL" -Restart
+
+## Перейменование без перезагпузки
+Rename-Computer -NewName "NNL"
+
+## А можно и позже командой 
+## - Restart-Computer
+
+## После перезагрузки проверьте имя ПК:
+$env:COMPUTERNAMERename-Computer -NewName "NNL" -Restart
+
+
+
 ##================= ≠≠≠ =================
 ##=== Generation NEW SSH-KEY Var1
 ssh-keygen -t ed25519 -C "$env:USERNAME" -f "$env:USERPROFILE\.ssh\$env:COMPUTERNAME.$env:USERNAME.ed25519.key";
@@ -101,6 +127,7 @@ echo "$SSHkeyPUB" | Out-File $env:USERPROFILE\.ssh\authorized_keys -Encoding asc
 #cat $env:USERPROFILE\.ssh\*$env:COMPUTERNAME.$env:USERNAME.ed25519.key.pub | Out-File $env:USERPROFILE\.ssh\authorized_keys -Encoding ascii;
 
 
+
 ##================= ≠≠≠ =================
 ##===== Cleaning 
 Remove-Item -Path $env:SYSTEMDRIVE\PS\OpenSSH -Recurse;
@@ -114,9 +141,14 @@ Remove-Item -Path $env:ProgramFiles\OpenSSH\OpenSSH-Win32 -Recurse;
 Write-Host "If Windows x64 ... ";
 Remove-Item -Path $env:ProgramFiles\OpenSSH\OpenSSH-Win64 -Recurse;
 }
-echo "OpenSSH installed...."
+
+echo "OpenSSH is installed........."
+
 ##================= ≠≠≠ =================
 exit
+
+
+
 
 
 
@@ -128,6 +160,7 @@ exit
 # {Write "Windows x64";}
 # else
 # {Write "Windows x86";}
+
 ##================= ≠≠≠ =================
 ##  Variant 2
 # If([IntPtr]::Size -eq 4)
