@@ -114,7 +114,7 @@ Remove-Item -Path $env:ProgramFiles\OpenSSH\OpenSSH-Win32 -Recurse;
 Write-Host "If Windows x64 ... ";
 Remove-Item -Path $env:ProgramFiles\OpenSSH\OpenSSH-Win64 -Recurse;
 }
-echo "OpenSSH installed....
+echo "OpenSSH installed...."
 ##================= ≠≠≠ =================
 exit
 
