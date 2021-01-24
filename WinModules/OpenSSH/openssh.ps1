@@ -2,8 +2,8 @@
 
 ## =============== ≠≠≠ ===============
 ##  Variable
-$SSHkeyPUB = 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKp3bxeApwQec9N6DaIP1Iq3o7Ks4jcL66wHi1YdqkFC root'
-
+$SSHkeyPUB = '$(cat Key.pub)'
+# Get-Variable 
 
 ## =============== ≠≠≠ ===============
 ##  Start as Administrator
@@ -114,7 +114,7 @@ Remove-Item -Path $env:ProgramFiles\OpenSSH\OpenSSH-Win32 -Recurse;
 Write-Host "If Windows x64 ... ";
 Remove-Item -Path $env:ProgramFiles\OpenSSH\OpenSSH-Win64 -Recurse;
 }
-
+echo "OpenSSH installed....
 ##================= ≠≠≠ =================
 exit
 
